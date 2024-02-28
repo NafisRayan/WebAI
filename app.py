@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
+import pdfkit
 
 # Streamlit app code
 st.title('Web Scraping with Pandas and Streamlit')
@@ -13,6 +14,7 @@ url = st.text_input('Enter the website URL', 'https://bbc.com')
 def scrape_data(url):
     # Send HTTP request and parse content
     response = requests.get(url)
+    # print(response)
     soup = BeautifulSoup(response.content, 'html.parser')
 
     # Scraping logic - use BeautifulSoup to find and extract various types of content
@@ -33,10 +35,28 @@ def scrape_data(url):
     # return the processed data
     return df
 
+
+# Function to generate a PDF from the scraped data
+def generate_pdf(scraped_data):
+    # Convert the DataFrame to HTML
+    html = scraped_data.to_html(index=False)
+    
+    # Generate the PDF
+    pdfkit.from_string(html, 'scraped_data.pdf')
+
+
 # Button to trigger scraping
 if st.button('Scrape Data'):
     if url:
         scraped_data = scrape_data(url)
+        paragraph = ' '.join(scraped_data['Text'].dropna())
         st.write(scraped_data)
+        st.write(paragraph)
+
+        # Button to download the scraped data as a PDF
+        if st.button('Download as PDF'):
+            generate_pdf(scraped_data)
+            st.success('PDF generated successfully.')
+        
     else:
         st.write('Please enter a valid website URL')
