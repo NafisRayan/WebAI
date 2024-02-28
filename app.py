@@ -48,6 +48,8 @@ def generate_pdf(scraped_data):
 # Button to trigger scraping
 if st.button('Scrape Data'):
     if url:
+        if 'https://' not in url:
+            url = 'https://' + url
         scraped_data = scrape_data(url)
         paragraph = ' '.join(scraped_data['Text'].dropna())
         st.write(scraped_data)
