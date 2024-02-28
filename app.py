@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 st.title('Web Scraping with Pandas and Streamlit')
 
 # Input for the website URL
-url = st.text_input('Enter the website URL', 'https://news.ycombinator.com/')
+url = st.text_input('Enter the website URL', 'https://bbc.com')
 
 # Function to scrape data
 def scrape_data(url):
